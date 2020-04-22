@@ -14,7 +14,7 @@ import matplotlib.pyplot as mp
 from pylab import show
 from sklearn.model_selection import cross_val_predict
 from sklearn.model_selection import cross_val_score
-
+from sklearn.tree import DecisionTreeClassifier
 # Load data. csv file should be in the same folder as the notebook for this to work, otherwise
 # give data path.
 data = np.loadtxt("data.csv")
@@ -69,95 +69,114 @@ for index in range(len(trainFeatures)):
 
 #plot the data points
 ## https://matplotlib.org/api/_as_gen/matplotlib.pyplot.scatter.html
-mp.scatter(X,Y,s=3,c=colors)
+# mp.scatter(X,Y,s=3,c=colors)
 
 #specify the axes
-mp.xlim(-1,1)
-mp.xlabel("Average Intensity")
-mp.ylim(-1,1)
-mp.ylabel("Intensity Variance")
-mp.title("Figure 1.1")
-#display the current graph
-show()
+# mp.xlim(-1,1)
+# mp.xlabel("Average Intensity")
+# mp.ylim(-1,1)
+# mp.ylabel("Intensity Variance")
+# mp.title("Figure 1.1")
+# #display the current graph
+# show()
 #create the model
 #https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
 
-# Declare Model
-model = KNeighborsClassifier(n_neighbors=1)
-# Fit model to our data
-model.fit(simpleTrain,trainDigits)
 
 # Lists to hold inpoints, predictions and assigned colors
-xPred = []
-yPred = []
-cPred = []
-# Use input points to get predictions here
-for xP in range(-100,100):
-    xP = xP/100.0
-    for yP in range(-100,100):
-        yP = yP/100.0
-        xPred.append(xP)
-        yPred.append(yP)
-        if(model.predict([[xP,yP]])=="1.0"):
-            cPred.append("b")
-        else:
-            cPred.append("r")
+# xPred = []
+# yPred = []
+# cPred = []
+# # Use input points to get predictions here
+# for xP in range(-100,100):
+#     xP = xP/100.0
+#     for yP in range(-100,100):
+#         yP = yP/100.0
+#         xPred.append(xP)
+#         yPred.append(yP)
+#         if(model.predict([[xP,yP]])=="1.0"):
+#             cPred.append("b")
+#         else:
+#             cPred.append("r")
 
 ## Visualize Results
 #plot the points
-mp.scatter(X,Y,s=3,c=colors)
 
-#plot the regions
-mp.scatter(xPred,yPred,s=3,c=cPred,alpha=.1)
+# mp.scatter(X,Y,s=3,c=colors)
 
-#setup the axes
-mp.xlim(-1,1)
-mp.xlabel("Average Intensity")
-mp.ylim(-1,1)
-mp.ylabel("Intensity Variance")
-mp.title("Figure 1.2 Decision Region for 2D")
-show()
+# #plot the regions
+# mp.scatter(xPred,yPred,s=3,c=cPred,alpha=.1)
+
+# #setup the axes
+# mp.xlim(-1,1)
+# mp.xlabel("Average Intensity")
+# mp.ylim(-1,1)
+# mp.ylabel("Intensity Variance")
+# mp.title("Figure 1.2 Decision Region for 2D")
+# show()
 
 
 
-oddKValaues = list(range(1,50,2))
+# oddKValaues = list(range(1,50,2))
 
-cvScores256d = []
-colorList = []
+# cvScores256d = []
+# colorList = []
 
-cvstd = []
+# cvstd = []
 
-for k in oddKValaues:
-    model2 = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
-    model2.fit(trainFeatures, trainDigits)
-    predicted256d = cross_val_score(model2, trainFeatures, trainDigits, cv=10)
-    cvScores256d.append (predicted256d.mean()*100)
-    cvstd.append(196*np.std (predicted256d))
-    colorList.append("r")
+# for k in oddKValaues:
+#     model2 = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
+#     model2.fit(trainFeatures, trainDigits)
+#     predicted256d = cross_val_score(model2, trainFeatures, trainDigits, cv=10)
+#     cvScores256d.append (predicted256d.mean()*100)
+#     cvstd.append(196*np.std (predicted256d))
+#     colorList.append("r")
 
-for k in oddKValaues:
-    model0 = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
-    model0.fit(simpleTrain, trainDigits)
-    predicted2d = cross_val_score(model0, simpleTrain, trainDigits, cv=10)
-    cvScores256d.append (predicted2d.mean()*100)
-    cvstd.append(196*np.std (predicted2d))
-    colorList.append("b")
+# for k in oddKValaues:
+#     model0 = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
+#     model0.fit(simpleTrain, trainDigits)
+#     predicted2d = cross_val_score(model0, simpleTrain, trainDigits, cv=10)
+#     cvScores256d.append (predicted2d.mean()*100)
+#     cvstd.append(196*np.std (predicted2d))
+#     colorList.append("b")
 
-zeroes = [0]*25
+# zeroes = [0]*25
 
-csError256d = [100 - x for x in cvScores256d]
+# csError256d = [100 - x for x in cvScores256d]
 
-mp.errorbar(oddKValaues, csError256d[25:], yerr = [tuple(zeroes), tuple(cvstd[25:])], ls='', )
-mp.errorbar(oddKValaues, csError256d[:25], yerr = [tuple(zeroes), tuple(cvstd[:25])], ls='', )
-mp.scatter(oddKValaues*2 , csError256d, s=3, c = colorList)
-mp.xlabel("K values")
-mp.ylabel("Cross Validation Error")
-mp.title("Odd K value Cross Validation Graph")
-mp.title("Figure 1.3")
-mp.show()
+# mp.errorbar(oddKValaues, csError256d[25:], yerr = [tuple(zeroes), tuple(cvstd[25:])], ls='', )
+# mp.errorbar(oddKValaues, csError256d[:25], yerr = [tuple(zeroes), tuple(cvstd[:25])], ls='', )
+# mp.scatter(oddKValaues*2 , csError256d, s=3, c = colorList)
+# mp.xlabel("K values")
+# mp.ylabel("Cross Validation Error")
+# mp.title("Odd K value Cross Validation Graph")
+# mp.title("Figure 1.3")
+# mp.show()
 
 ####################################################################################
-# Declare Model
+
+print ("The length of simple ----", len(simpleTrain))
+
+# 1(a) Decision Tree classifier
+cv_score = []
+max_leaf_nodes = [5, 10, 15, 20, 30, 40, 50, 75, 100, 200, 500, 1000, 10000]
+ax = list(range(1, len(max_leaf_nodes)+1, 1))
+
+for x in (max_leaf_nodes):
+    model = DecisionTreeClassifier(criterion = 'entropy', max_leaf_nodes = x)
+    #model = model.fit(simpleTrain, trainDigits) 
+    predict_score = cross_val_score(model, simpleTrain, trainDigits)
+    cv_score.append(1 - predict_score.mean())
+
+print (cv_score)
+
+mp.title("The CV Score with different max_leaf_node")
+mp.plot(ax, cv_score)
+mp.xscale("log")
+mp.show()
+
+
+# 1(b) Decision Tree classifier
 
 
 
@@ -167,35 +186,35 @@ mp.show()
 
 
 #####################################################################################
-xPred = []
-yPred = []
-cPred = []
-# Use input points to get predictions here
-for xP in range(-100,100):
-    xP = xP/100.0
-    for yP in range(-100,100):
-        yP = yP/100.0
-        xPred.append(xP)
-        yPred.append(yP)
-        if(model.predict([[xP,yP]])=="1.0"):
-            cPred.append("b")
-        else:
-            cPred.append("r")
+# xPred = []
+# yPred = []
+# cPred = []
+# # Use input points to get predictions here
+# for xP in range(-100,100):
+#     xP = xP/100.0
+#     for yP in range(-100,100):
+#         yP = yP/100.0
+#         xPred.append(xP)
+#         yPred.append(yP)
+#         if(model.predict([[xP,yP]])=="1.0"):
+#             cPred.append("b")
+#         else:
+#             cPred.append("r")
 
-## Visualize Results
-#plot the points
-mp.scatter(X,Y,s=3,c=colors)
+# ## Visualize Results
+# #plot the points
+# mp.scatter(X,Y,s=3,c=colors)
 
-#plot the regions
-mp.scatter(xPred,yPred,s=3,c=cPred,alpha=.1)
+# #plot the regions
+# mp.scatter(xPred,yPred,s=3,c=cPred,alpha=.1)
 
-#setup the axes
-mp.xlim(-1,1)
-mp.xlabel("Average Intensity")
-mp.ylim(-1,1)
-mp.ylabel("Intensity Variance")
-mp.title("Figure 1.4 Decision Region for 256D")
-show()
+# #setup the axes
+# mp.xlim(-1,1)
+# mp.xlabel("Average Intensity")
+# mp.ylim(-1,1)
+# mp.ylabel("Intensity Variance")
+# mp.title("Figure 1.4 Decision Region for 256D")
+# show()
 
 
 
