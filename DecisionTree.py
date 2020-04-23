@@ -116,46 +116,7 @@ for index in range(len(trainFeatures)):
 # show()
 
 
-
-# oddKValaues = list(range(1,50,2))
-
-# cvScores256d = []
-# colorList = []
-
-# cvstd = []
-
-# for k in oddKValaues:
-#     model2 = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
-#     model2.fit(trainFeatures, trainDigits)
-#     predicted256d = cross_val_score(model2, trainFeatures, trainDigits, cv=10)
-#     cvScores256d.append (predicted256d.mean()*100)
-#     cvstd.append(196*np.std (predicted256d))
-#     colorList.append("r")
-
-# for k in oddKValaues:
-#     model0 = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
-#     model0.fit(simpleTrain, trainDigits)
-#     predicted2d = cross_val_score(model0, simpleTrain, trainDigits, cv=10)
-#     cvScores256d.append (predicted2d.mean()*100)
-#     cvstd.append(196*np.std (predicted2d))
-#     colorList.append("b")
-
-# zeroes = [0]*25
-
-# csError256d = [100 - x for x in cvScores256d]
-
-# mp.errorbar(oddKValaues, csError256d[25:], yerr = [tuple(zeroes), tuple(cvstd[25:])], ls='', )
-# mp.errorbar(oddKValaues, csError256d[:25], yerr = [tuple(zeroes), tuple(cvstd[:25])], ls='', )
-# mp.scatter(oddKValaues*2 , csError256d, s=3, c = colorList)
-# mp.xlabel("K values")
-# mp.ylabel("Cross Validation Error")
-# mp.title("Odd K value Cross Validation Graph")
-# mp.title("Figure 1.3")
-# mp.show()
-
 ####################################################################################
-
-print ("The length of simple ----", len(simpleTrain))
 
 # 1(a) Decision Tree classifier
 cv_score = []
@@ -168,9 +129,7 @@ for x in (max_leaf_nodes):
     predict_score = cross_val_score(model, simpleTrain, trainDigits)
     cv_score.append(1 - predict_score.mean())
 
-print (cv_score)
-
-mp.title("The CV Score with different max_leaf_node")
+mp.title("Figure 4.1 Cross validation Error for Decision Tree with different max_leaf_node")
 mp.plot(ax, cv_score)
 mp.xscale("log")
 mp.show()
@@ -178,7 +137,47 @@ mp.show()
 
 # 1(b) Decision Tree classifier
 
+# ?  Looking at the graph we can say that as the value of the max_leaf_node
 
+
+# 1(c) Decision Tree classifier
+
+# ? The optimal model with minimum cross validation error is with max_leaf_nodes = 40, 500 amd 10000 
+# ? but with max_leaf_nodes = 500, 10000 the model gets overfit. Hence when max_leaf_nodes = 40 the models has lowest cross validation error
+
+xPred = []
+yPred = []
+cPred = []
+
+model = DecisionTreeClassifier(criterion = 'entropy', max_leaf_nodes = 40)
+model = model.fit(simpleTrain, trainDigits) 
+
+# Use input points to get predictions here
+for xP in range(-100,100):
+    xP = xP/100.0
+    for yP in range(-100,100):
+        yP = yP/100.0
+        xPred.append(xP)
+        yPred.append(yP)
+        if(model.predict([[xP,yP]])=="1.0"):
+            cPred.append("b")
+        else:
+            cPred.append("r")
+
+## Visualize Results
+#plot the points
+mp.scatter(X,Y,s=3,c=colors)
+
+#plot the regions
+mp.scatter(xPred,yPred,s=3,c=cPred,alpha=.1)
+
+#setup the axes
+mp.xlim(-1,1)
+mp.ylim(-1,1)
+mp.title("Figure 4.2 Decision Tree with minimum Cross Validation Error")
+show()
+
+# 1(c) Decision Tree classifier
 
 
 
